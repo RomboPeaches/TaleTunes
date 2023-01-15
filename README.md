@@ -14,4 +14,4 @@ using the YT API. I'd like the app to run locally, requiering no profiles or log
 by downloading a txt or json file containing the build "groups" and their urls.
 
 Side goal of this is it to gain experience with GitHub, GIT, JS and softwaredevelopment in general,
-so feel free to spill advice, idears or point out fatal issues?  
+so feel free to give me advice.   
