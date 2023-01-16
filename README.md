@@ -1,6 +1,6 @@
 # TaleTunes
 
-## Hi,
+Hi,
 
 TaleTunes will be an audiomixer and soundfx tool for tabletop roleplaying games. The idear is to make it a browserapp for desktop and maybe mobile devices. Using the YT API (https://developers.google.com/youtube/iframe_api_reference) to build an intuativ interface helping gms to make smooth audio transitions 
 between narrative events like battle, visions or themes and therefore create a more immersiv experience. 
