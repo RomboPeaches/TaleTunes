@@ -9,6 +9,3 @@ TaleTunes will be an audiomixer and soundfx tool for tabletop roleplaying games.
 - B Things
 
  	![alt text](inn.jpeg)
-  
-  edit A
-  edit B
