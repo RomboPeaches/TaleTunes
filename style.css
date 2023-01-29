@@ -1,0 +1,33 @@
+
+body
+{
+	margin: 0.0;
+}
+
+.topBar
+{
+	position: -webkit-sticky;
+	position: sticky;
+	z-index: 1020;
+	top: 0px;
+	
+	width: 100%;
+	height: 50px;
+
+	background-color: yellowgreen;
+}
+
+.divA
+{
+	background-color: orange;
+	height: 200px;
+	width: 100%;
+}
+
+.divB
+{
+	background-color: blueviolet;
+	height: 200px;
+	width: 100%;
+}
+
