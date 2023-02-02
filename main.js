@@ -1,6 +1,7 @@
 
-// loads yt player api
-function load_iframe_api() 
+let url = "https://www.youtube.com/playlist?list=PLniTzKxa2c_fogTSXZK1gAWtVbv7P51LI";
+
+function loadScript() 
 {
   if (typeof(YT) == 'undefined' || typeof(YT.Player) == 'undefined')
   {
@@ -10,21 +11,38 @@ function load_iframe_api()
     firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
   }
 }
-load_iframe_api();
+loadScript();
 
-// convert videos url to videoID
+var player;
+function init_player(url)
+{
+  player = new YT.Player("divA", { 
+    height: "100%", 
+    width: "100%", 
+    videoId: getYouTubeVideoId(url), 
+    events: {
+      onReady: onPlayerReady
+    },
+  });
+}
+
+function onPlayerReady(event)
+{
+  // Get player's playlist
+  var playlist = player.getPlaylist();
+  console.log(playlist);
+}
+
+// This function is called by YouTube once the the API is ready.
+function onYouTubeIframeAPIReady()
+{
+  init_player(url);
+}
+
+// Convert videos url to videoID
 function getYouTubeVideoId(url)
 {
   let regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/; // ???
   let match = url.match(regExp);
   return (match && match[7].length == 11) ? match[7] : false;
 }
-
-function append_tune_group(parent)
-{
-  document.getElementById(String(parent)).appendChild()
-}
-
-// Weniger Knöpfe FADE STEPS MIN
-
-

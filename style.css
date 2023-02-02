@@ -4,6 +4,18 @@ body
 	margin: 0.0;
 }
 
+#container
+{
+	margin: 0.0;
+}
+
+#divA
+{
+	width: 500px;
+	height: 500px;
+	background-color: yellowgreen;
+}
+
 .topBar
 {
 	position: -webkit-sticky;
@@ -17,17 +29,20 @@ body
 	background-color: yellowgreen;
 }
 
-.divA
+.tuneGroup
 {
 	background-color: orange;
 	height: 200px;
 	width: 100%;
+
+	margin-top: 5px;
 }
 
-.divB
+.tune
 {
 	background-color: blueviolet;
 	height: 200px;
 	width: 100%;
+	margin-top: 5px;
 }
 
