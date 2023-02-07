@@ -4,13 +4,14 @@
     --medium-color: rgb(40, 40, 40);
     --light-color: rgb(60, 60, 60);
 
-    --play-heigth: 320px;
+    --play-heigth: 200px;
     --player-width: 200px;
 }
 
 * {
-    margin: 0;
     font-family: 'Helvetica', sans-serif;
+    margin: 0;
+    padding: 0;
 }
 
 body {
@@ -20,22 +21,28 @@ body {
 }
 
 .playerControllerSection {
-    width: 256px;
+
+    width: 220px;
     height: 100%;
-    font-size: 0;
+    font-size: 0px;
     position: fixed;
-    text-align: center;
-    background-color: var(--dark-color);
+    text-align: right;
+    margin-top: 20px;
 }
 
 .taleTunes {
-    width: 256px;
-    height: 407;
-    font-size: 5rem;
-    padding-top: 18px;
-    text-align: justify-all;
-    color: var(--light-color);
-
+    position: relative;
+    display: inline-grid;
+    margin-top: 0px;
+    margin-bottom: 14px;
+    width: 200px;
+    height: 222px;
+    font-size: 4rem;
+    padding-top: 10px;
+    text-align: center;
+    color: var(--dark-color);
+    background-color: dodgerblue;
+    border-radius: 7px;
 }
 
 #tLetter {
@@ -50,21 +57,23 @@ body {
     color: orange;
 }
 
-#info {
+#infoTop {
 
-    height: 13px;
     font-size: 1rem;
     color: dodgerblue;
-    padding-bottom: 18px;
+    margin-left: 7px;
 }
 
 .divButton {
 
     opacity: 1.0;
-    width: 88px;
+    width: 80px;
     height: 55px;
-    margin: 7px;
-    padding: 7px;
+    margin-left: 14px;
+    margin-bottom: 14px;
+    margin-right: 0px;
+
+    padding: 6.5px;
     text-align: left;
     font-size: 1rem;
     border-radius: 7px;
@@ -82,13 +91,14 @@ body {
 }
 
 .playerContainerSection {
-    left: 256px;
+    left: 220px;
     font-size: 0;
-    padding-top: 10px;
-    text-align: center;
+    padding-top: 32px;
+    padding-left: 7px;
+    text-align: left;
     position: absolute;
     display: inline-block;
-    width: calc(100vw - 256px);
+    width: 200;
 }
 
 .playerContainer {
@@ -96,7 +106,7 @@ body {
     width: var(--player-width);
     height: var(--player-height);
     margin: auto;
-    padding: 14px;
+    padding: 7px;
     border-radius: 7px;
     display: inline-block;
 }
