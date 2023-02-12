@@ -7,27 +7,28 @@
 
 <body>
     <div class="playerControllerSection">
-        <h1 class="taleTunes">T A L E T U N E S</h1>
-        <h1 id="tLetter">T</h1>
-        <div class=" divButton">play</div>
+        <div id="taleTunesContainer">
+            <div id="taleTunes">T A L E T U N E S</div>
+        </div>
+        <div onclick="clearSelection();" class="divButton">play</div>
         <div class="divButton">mute</div>
         <div class="divButton">fade in</div>
         <div class="divButton">fade out</div>
-        <div class="divButton">incr. vol (step)</div>
-        <div class="divButton">decr. vol (step)</div>
+        <div class="divButton">vol ++</div>
+        <div class="divButton">vol --</div>
         <div class="divButton">reset</div>
-        <div class="divButton">clear selection</div>
+        <div onclick="clearSelection();" class="divButton">clear</div>
+        <div class="divButton">*</div>
         <div class="divButton">add</div>
         <div class="divButton">delete</div>
         <div class="divButton">select all</div>
-        <div class="divButton">*</div>
         <div class="divButton">import json</div>
         <div class="divButton">export json</div>
     </div>
     <div class="playerContainerSection" id="playerContainerSection">
-        <div id="infoTop">taletunes v.1.44.1b</div>
     </div>
-    <script src="main.js"></script>
+    <script src="app.js"></script>
+    <script type="module" src="playerSheperd.js"></script>
 </body>
 
 </html>

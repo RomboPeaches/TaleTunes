@@ -19,7 +19,47 @@
 // player status: playing, rdy, ...
 // player url
 
+// load players fades ... after each other?! -> sap use
+
+// clipboard urls!?! i.e. coolers 
+
+// push players into array to access functionalities
+
+// when del player leave index empty, add by pushing new index, ignore empties when save  
+
+// tooltip for describtion and way to add descriptions 
+
+// fain + play!
+
 //-----------------------------------------------------------------------------
+
+class Tune {
+
+    constructor(player, url, domId) {
+
+        this.player = player;
+        this.url = url;
+        this.domId = domId;
+        this.vidId = this.videoId(url);
+        this.selected = false;
+        this.volumeTarget = 100;
+        this.describtion = "no describtion";
+    }
+
+    // convert video-url to videoId
+    videoId(url) {
+
+        let regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/; // ???
+        let match = url.match(regExp);
+        return (match && match[7].length == 11) ? match[7] : false;
+    }
+
+
+}
+
+tina = new Tune("https://www.youtube.com/watch?v=aW9wBjkpWIE", "peter");
+console.log(tina.info);
+
 
 // Default urls
 let urls = [
@@ -61,19 +101,14 @@ let urls = [
     "https://www.youtube.com/watch?v=-MwZxXwsSOs"
 ]
 
-
 let numPlayers = urls.length;
-numPlayers = 13;
+numPlayers = 21;
 
-let ytApi = true;
-
-if (ytApi == true) {
-
-    loadScript();
-}
+loadScript();
 
 // Load the YT Player-API
 function loadScript() {
+
     if (typeof(YT) == 'undefined' || typeof(YT.Player) == 'undefined') {
         var tag = document.createElement('script');
         tag.src = 'https://www.youtube.com/iframe_api';
@@ -90,6 +125,14 @@ function getYouTubeVideoId(url) {
     return (match && match[7].length == 11) ? match[7] : false;
 }
 
+function clearSelection() {
+
+    let pickers = document.getElementsByClassName('picker');
+    for (var i = 0; i < pickers.length; i++) {
+        pickers[i].style.opacity = 0.7;
+    }
+}
+
 // Add player, container, picker     
 function addPlayer(url, index) {
 
@@ -99,22 +142,17 @@ function addPlayer(url, index) {
     playerContainer.classList.add('playerContainer');
     document.getElementById('playerContainerSection').appendChild(playerContainer);
 
-    // Create cover divs to tint selection 
+    // Create cover divs to tint if selected and to fade in 
     let picker = document.createElement('div');
+    picker.id = 'picker' + index;
     picker.classList.add('picker');
     document.getElementById('playerContainer' + String(index)).appendChild(picker);
 
-    // Add  onclkick functions to pickers
+    // Add onclkick functions to pickers
     picker.onclick = function(event) {
 
-        this.style.opacity = 0.0;
-    }
-
-    // fade in picker opacity
-    for (opacity = 0; opacity < 1.0; opacity = opacity + 0.1) {
-        setTimeout(function() {
-            picker.style.opacity = opacity;
-        }, 100);
+        picker.style.opacity = 0.0;
+        //document.getElementById('infoText').innerHTML = picker.id;
     }
 
     // Create a temp div to be replaced by the video-iframe
@@ -122,50 +160,57 @@ function addPlayer(url, index) {
     tempDivElement.id = 'player' + String(index);
     document.getElementById('playerContainer' + String(index)).appendChild(tempDivElement);
 
-    if (ytApi == true) {
+    // Create a YT.Player object wich replaces the tempDivElement with the matching id
+    let player = new YT.Player(tempDivElement.id, {
 
-        // Create a YT.Player object wich replaces the tempDivElement with the matching id
-        let player = new YT.Player(tempDivElement.id, {
+        videoId: getYouTubeVideoId(url),
+        playerVars: {
 
-            videoId: getYouTubeVideoId(url),
-            playerVars: {
+            fs: 0,
+            autoplay: 0,
+            showinfo: 2,
+            controls: 0,
+            disablekb: 1,
+            iv_load_policy: 3,
+            allowfullscreen: 0,
+        },
+        events: {
 
-                fs: 0,
-                autoplay: 0,
-                showinfo: 2,
-                controls: 0,
-                disablekb: 1,
-                iv_load_policy: 3,
-                allowfullscreen: 0,
-            },
-            events: {
-
-                onReady: onPlayerReady,
-                onStateChange: onPlayerStateChange
-            },
-        });
-        // add the iframe to the player class
-        document.getElementById('player' + index).classList.add('player');
-    }
+            onReady: onPlayerReady,
+            onStateChange: onPlayerStateChange
+        },
+    });
+    // add the iframe to the player class
+    document.getElementById('player' + index).classList.add('player');
 }
-
 // This function is called by YouTube once the the API is ready
 function onYouTubeIframeAPIReady() {
-
-    // T letter 
-    document.getElementById('tLetter').style.opacity = 1.0;
-
-    for (var i = 0; i < numPlayers; i++) {
-
-        addPlayer(urls[i], i);
-    }
+    // add the first player
+    addPlayer(urls[0], 0);
 }
-
+// to count ready players (to add after each other)
+let readyCounter = 0;
 // Is called when a Player is ready
 function onPlayerReady(event) {
 
-    // T letter hides
-    document.getElementById('tLetter').style.opacity = 0.0;
+    // fading effect for each player
+    let picker = document.getElementById('picker' + String(readyCounter));
+    setTimeout(function() {
+
+        picker.style.opacity = 0.0;
+        picker.style.transition = 'opacity 0.7s';
+        picker.style.opacity = 0.7;
+        picker.style.pointerEvents = 'auto';
+
+    }, 1000);
+
+    // add next player when prev ready
+    readyCounter += 1;
+    if (readyCounter < numPlayers) {
+
+        addPlayer(urls[readyCounter], readyCounter);
+    }
+
 }
 
 // Is called when a player changes state
