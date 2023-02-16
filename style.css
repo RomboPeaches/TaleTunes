@@ -2,14 +2,8 @@
 
     color: p;
 
-    --body-and-picker-and-logo-text: black;
-
-    --logo-bg: rgb(255, 255, 255);
-    --logo-text: black;
-
-    --btn: rgb(255, 255, 255);
-    --btn-text: black;
-    --btn-hover: #F18701;
+    --color-1: white;
+    --color-2: black;
 
     --player-width: 200px;
     --player-height: 200px;
@@ -25,7 +19,7 @@
 body {
     height: 100%;
     /* bc firefox fixed issue*/
-    background-color: var(--body-and-picker-and-logo-text);
+    background-color: black;
 }
 
 .playerControllerSection {
@@ -37,19 +31,19 @@ body {
     padding-right: 14px;
 }
 
-#taleTunesContainer {
+#taleTunesLettersContainer {
     position: relative;
     display: inline-grid;
     margin-top: 14px;
     width: 200px;
     height: 320px;
     font-size: 0px;
-    background-color: var(--logo-bg);
+    background-color: white;
     border-radius: 7px;
     margin-bottom: 14px;
 }
 
-#taleTunes {
+#taleTunesLetters {
     position: relative;
     width: 160px;
     height: 160px;
@@ -59,8 +53,7 @@ body {
     font-size: 3rem;
     text-align: center;
     font-weight: 999;
-
-    color: var(--logo-text);
+    color: black;
 }
 
 .divButton {
@@ -71,75 +64,58 @@ body {
     padding: 6.5px;
     text-align: left;
     font-size: 16px;
-    font-weight: 499;
+    font-weight: 1;
     border-radius: 7px;
     position: relative;
     display: inline-grid;
-    color: var(--btn-text);
-    background-color: var(--btn);
+    color: black;
+    background-color: white;
+    transition: 0.2s;
 }
 
 .divButton:hover {
-    background-color: var(--btn-hover);
+    background-color: rgb(40, 40, 40);
+    color: white;
 }
 
 .playerContainerSection {
     left: 228px;
-    padding-top: 64px;
+    padding-top: 0px;
     width: calc(100vw - 228px);
     font-size: 0;
     text-align: left;
     position: absolute;
-    background-color: black;
-    padding-bottom: 100px;
 }
 
 .playerContainer {
     width: var(--player-width);
     height: var(--player-height);
-    /*border-radius: 7px;*/
-    display: inline-block;
+    display: inline-grid;
     overflow: hidden;
     border-radius: 7px;
     margin: 14px;
-
-    /*background-color: green;*/
 }
 
 .picker {
     width: var(--player-width);
     height: var(--player-height);
     position: absolute;
-    border-radius: 0px;
-    /*background-color: var(--body-and-picker-and-logo-text);*/
-    /*pointer-events: none;*/
+    border-radius: 7px;
+    background-color: white;
+    opacity: 0.1;
 }
 
 .picker:hover {
-    opacity: 0.3 !important;
-    transition: 'opacity 0.1s' !important;
+    /*opacity: 0.7 !important;*/
+    transition: opacity 0.1s !important;
 }
 
 .player {
-    /*
-    width: var(--player-width);
-    height: var(--player-height);
-    */
-    width: 500px;
-    height: 500px;
-    translate: -150px -150px;
+    width: 200px;
+    height: 200px;
+    translate: -0px -0px;
     font-size: 0rem;
-}
-
-.infoBar {
-    position: relative;
-    width: 100%;
-    bottom: 90%;
-    padding-left: 7px;
-    color: white;
-    font-size: 1rem;
-    text-align: left;
-    margin-top: -20px;
+    pointer-events: none;
 }
 
 @media (max-width:500px) {}
