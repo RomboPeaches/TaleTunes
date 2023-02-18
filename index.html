@@ -13,18 +13,18 @@
         <div onclick="tuneGroup.selectAll()" class="divButton">select all</div>
         <div onclick="tuneGroup.clearSelection()" class="divButton">clear selection</div>
         <div onclick="tuneGroup.playSelected()" class="divButton">play</div>
-        <div onclick="tuneGroup.pauseSelected(); consolo.log('fuck!!!')" class="divButton">pause</div>
+        <div onclick="tuneGroup.pauseSelected()" class="divButton">pause</div>
         <div onclick="tuneGroup.faidInSelected()" class="divButton">fade in</div>
         <div onclick="tuneGroup.faidOutSelected()" class="divButton">fade out</div>
-        <div class="divButton">vol ++</div>
-        <div class="divButton">vol --</div>
-        <div onclick="" class=" divButton">mute</div>
-        <div onclick="" class=" divButton">unmute</div>
+        <div onclick="tuneGroup.volumeStepIncrease()" class="divButton">vol ++</div>
+        <div onclick="tuneGroup.volumeStepDecrease()" class="divButton">vol --</div>
+        <div onclick="tuneGroup.muteSelected()" class="divButton">mute</div>
+        <div onclick="tuneGroup.unMuteSelected()" class="divButton">unmute</div>
         <div onclick="tuneGroup.resetSelected()" class="divButton">reset</div>
         <div onclick="tuneGroup.removeSelected()" class="divButton">remove</div>
         <div onclick="tuneGroup.addUrls('https://www.youtube.com/watch?v=ccj1AiFE02U')" class=" divButton">add_test</div>
-        <div class="divButton">import json</div>
-        <div class="divButton">export json</div>
+        <!--div class="divButton">import json</div>
+        <div class="divButton">export json</div-->
     </div>
     <div class="playerContainerSection" id="playerContainerSection">
     </div>
