@@ -6,85 +6,63 @@ const port = 8000;
 
 // load style.css
 let styleFile;
-fs.readFile(__dirname + "/style.css")
-    .then(contents => {
-        styleFile = contents;
-        server.listen(port, host, () => {
-            console.log("style.css load OK");
+fs.readFile(__dirname + "/style.css";
+        .then(contents => {
+            styleFile = contents;
+            server.listen(port, host, () => {
+                console.log("style.css load OK");
+            });
+        })
+        .catch(err => {
+            //console.error(`Could not read index.html file: ${err}`);
+            process.exit(1);
         });
-    })
-    .catch(err => {
-        //console.error(`Could not read index.html file: ${err}`);
-        process.exit(1);
-    });
 
-// load app.js
-let appFile;
-fs.readFile(__dirname + "/app.js")
-    .then(contents => {
-        appFile = contents;
-        server.listen(port, host, () => {
-            console.log("app.js load PK");
+        // load app.js
+        let appFile; fs.readFile(__dirname + "/app.js")
+        .then(contents => {
+            appFile = contents;
+            server.listen(port, host, () => {
+                console.log("app.js load PK");
+            });
+        })
+        .catch(err => {
+            //console.error(`Could not read app.js file: ${err}`);
+            process.exit(1);
         });
-    })
-    .catch(err => {
-        //console.error(`Could not read app.js file: ${err}`);
-        process.exit(1);
-    });
 
-// load index.html
-let indexFile;
-fs.readFile(__dirname + "/index.html")
-    .then(contents => {
-        indexFile = contents;
-        server.listen(port, host, () => {
-            console.log("index.html load OK");
+        // load index.html
+        let indexFile; fs.readFile(__dirname + "/index.html")
+        .then(contents => {
+            indexFile = contents;
+            server.listen(port, host, () => {
+                console.log("index.html load OK");
+            });
+        })
+        .catch(err => {
+            //console.error(`Could not read index.html file: ${err}`);
+            process.exit(1);
         });
-    })
-    .catch(err => {
-        //console.error(`Could not read index.html file: ${err}`);
-        process.exit(1);
-    });
 
-// load playerSheperd.css
-let playerSheperdFile;
-fs.readFile(__dirname + "/playerSheperd.js")
-    .then(contents => {
-        playerSheperdFile = contents;
-        server.listen(port, host, () => {
-            console.log('playerSheperd.js loaded OK');
-        });
-    })
-    .catch(err => {
-        //console.error(`Could not read index.html file: ${err}`);
-        process.exit(1);
-    });
+        const requestListener = function(req, res) {
 
+            switch (req.url) {
 
-const requestListener = function(req, res) {
+                case "/style.css":
+                    res.writeHead(200, { "Content-Type": "text/css" });
+                    res.write(styleFile);
+                    break;
 
-    switch (req.url) {
+                case "/app.js":
+                    res.writeHead(200, { "Content-Type": "text/javascript" });
+                    res.write(appFile);
+                    break;
 
-        case "/style.css":
-            res.writeHead(200, { "Content-Type": "text/css" });
-            res.write(styleFile);
-            break;
+                default:
+                    res.writeHead(200, { "Content-Type": "text/html" });
+                    res.write(indexFile);
+            }
+            res.end();
+        };
 
-        case "/app.js":
-            res.writeHead(200, { "Content-Type": "text/javascript" });
-            res.write(appFile);
-            break;
-
-        case "/playerSheperd.js":
-            res.writeHead(200, { "Content-Type": "text/javascript" });
-            res.write(appFile);
-            break;
-
-        default:
-            res.writeHead(200, { "Content-Type": "text/html" });
-            res.write(indexFile);
-    }
-    res.end();
-};
-
-const server = http.createServer(requestListener);
+        const server = http.createServer(requestListener);

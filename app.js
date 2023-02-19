@@ -1,8 +1,11 @@
 // TODO
 
-// urls string id part to color to genrate always same color code for tunes!?,  
+// webpage to share TuneGroup Safefiles: name? legal issues? hosting?
 
-// drag and drop url saved urls and settings?! !!! json files !!!
+// istead dist or rule based fading :
+// -> fade function this.tune.fadefoo = f(target, nowVol) ?!?!!??! 
+
+// drag and drop url saved urls and settings?!
 
 // forbid selection until a player ready
 
@@ -18,6 +21,17 @@
 
 // visualize volume
 
+// when a command button is pushed and no tunes are seleted,
+// indicate that there are no tunes selected, selct by ...
+
+
+// randomRGB
+function randomRGB() {
+    let r = Math.floor(Math.random() * 255);
+    let g = Math.floor(Math.random() * 255);
+    let b = Math.floor(Math.random() * 255);
+    return "rgb(" + r + "," + g + "," + b + ")";
+}
 
 let defaultUrls = [
 
@@ -72,15 +86,34 @@ if (typeof(YT) == 'undefined' || typeof(YT.Player) == 'undefined') {
 function onYouTubeIframeAPIReady() {
 
     tuneGroup = new TuneGroup();
-    //tuneGroup.addUrls(defaultUrls);
-    tuneGroup.addUrls(defaultUrls.slice(0, 3));
+
+    //tuneGroup.createTune(defaultUrls);
+    tuneGroup.createTune(defaultUrls.slice(0, 4));
 }
 
 // called when a player is ready
 function onPlayerReady(event) {
 
+    let playersTune = tuneGroup.tunes[event.target.id - 1];
+
+    // to use previously used images for img idex beyond traget.id
+    let randomImageIndex = (event.target.id - 1) % 18;
+    console.log(randomImageIndex);
+
+    playersTune.picker.style = 'background-image: url("images/tuneImages/img' + randomImageIndex + '.jpeg")';
+
+    playersTune.picker.style.opacity = '0.4';
+    playersTune.picker.style.fontSize = '1rem';
+
+    // set describtion to video's title
+    playersTune.picker.innerHTML = event.target.getVideoData().title;
+
+
+    setTimeout(function() {}, 1000);
+
     tuneGroup.updateTunes();
 }
+
 
 // called when a player changes state
 function onPlayerStateChange(event) {}
@@ -100,13 +133,13 @@ class TuneGroup {
     }
 
     // adds new urls to create tunes from
-    addUrls(newUrls) {
+    createTune(newUrls) {
 
         this.urls = this.urls.concat(newUrls);
         this.updateTunes();
     }
 
-    // called once by addUrls and when a player is ready
+    // called once by createTune and when a player is ready
     updateTunes() {
 
         // make one tune for a url that has no corresponding tune 
@@ -118,13 +151,15 @@ class TuneGroup {
             // add onlick function the new tunes picker elem
             tune.picker.onclick = function() {
 
-                if (tune.selected == true) {
-                    tune.picker.style.opacity = 0.2;
-                    tune.selected = false;
-                } else {
-                    tune.picker.style.opacity = 0.8;
+                if (tune.selected == false) {
                     tune.selected = true;
+                    tune.picker.style.opacity = 1.0; // if selected
+                } else {
+                    tune.selected = false;
+                    tune.picker.style.opacity = 0.4; // if not selected
+
                 }
+
             }
             // add tune object to group.tunes 
             this.tunes.push(tune);
@@ -176,10 +211,11 @@ class TuneGroup {
     // play selected tunes
     playSelected() {
 
+        let numSelected = 0;
         this.tunes.forEach(tune => {
             if (tune.selected == true) {
                 tune.selected = false;
-                tune.picker.style.opacity = 0.2;
+                tune.picker.style.opacity = 0.4;
                 tune.player.playVideo();
             }
         });
@@ -191,7 +227,7 @@ class TuneGroup {
         this.tunes.forEach(tune => {
             if (tune.selected == true) {
                 tune.selected = false;
-                tune.picker.style.opacity = 0.2;
+                tune.picker.style.opacity = 0.4;
                 tune.player.pauseVideo();
             }
         });
@@ -202,7 +238,7 @@ class TuneGroup {
 
         this.tunes.forEach(tune => {
             tune.selected = true;
-            tune.picker.style.opacity = 0.8;
+            tune.picker.style.opacity = 1.0;
         });
     }
 
@@ -211,7 +247,7 @@ class TuneGroup {
 
         this.tunes.forEach(tune => {
             tune.selected = false;
-            tune.picker.style.opacity = 0.2;
+            tune.picker.style.opacity = 0.4;
         });
     }
 
@@ -221,7 +257,7 @@ class TuneGroup {
         this.tunes.forEach(tune => {
             if (tune.selected == true) {
                 tune.selected = false;
-                tune.picker.style.opacity = 0.2;
+                tune.picker.style.opacity = 0.4;
                 tune.player.stopVideo();
             }
         });
@@ -250,7 +286,7 @@ class TuneGroup {
                     tune.player.playVideo();
                 }
                 tune.selected = false;
-                tune.picker.style.opacity = 0.2;
+                tune.picker.style.opacity = 0.4;
                 tune.player.playVideo();
                 tune.faidTarget = 100;
             }
@@ -263,7 +299,7 @@ class TuneGroup {
         this.tunes.forEach(tune => {
             if (tune.selected == true) {
                 tune.selected = false;
-                tune.picker.style.opacity = 0.2;
+                tune.picker.style.opacity = 0.4;
                 tune.faidTarget = 0;
             }
         });
@@ -305,9 +341,9 @@ class TuneGroup {
         this.tunes.forEach(tune => {
             if (tune.selected == true) {
                 tune.selected = false;
-                tune.picker.style.opacity = 0.2;
-                tune.faidTarget = 0;
+                tune.picker.style.opacity = 0.4;
                 tune.player.setVolume(0);
+                tune.faidTarget = 0;
             }
         });
     }
@@ -318,7 +354,7 @@ class TuneGroup {
         this.tunes.forEach(tune => {
             if (tune.selected == true) {
                 tune.selected = false;
-                tune.picker.style.opacity = 0.2;
+                tune.picker.style.opacity = 0.4;
                 tune.faidTarget = 0;
                 tune.player.setVolume(100);
             }
@@ -331,7 +367,7 @@ class TuneGroup {
 // aswell as the tune related info and functionality, ...
 class Tune {
 
-    constructor(url, id) {
+    constructor(url, id, describtion = "default") {
 
         // create a container for player positioning
         let playerContainer = document.createElement('div');
@@ -339,29 +375,56 @@ class Tune {
         playerContainer.classList.add('playerContainer');
 
         // create picker div to tint if selected and fade in effect
-        let picker = document.createElement('div');
+        let picker = document.createElement('player');
         picker.id = 'picker' + id;
-        picker.style.opacity = 0.2;
         picker.classList.add('picker');
 
-        picker.onclick = function(event) {}
+        // pick random picker flash msg and flash image?
+        let randomImage = Math.floor(Math.random() * 16)
+        picker.style.backgroundPosition = '-156px -156px';
+        //picker.style.backgroundColor = 'black';
+        picker.style.color = 'white';
+
+        //picker.onclick = function(event) {}
         picker.onmouseover = function(event) {}
         picker.onmouseleave = function(event) {}
 
         // create a temp div to be replaced by the video-iframe
-        let tempDivElement = document.createElement('div');
-        tempDivElement.id = 'player' + String(id);
+        let swapDiv = document.createElement('div');
+        swapDiv.id = 'player' + id;
+
+        // volume visualisation divs /////////////////////////////
+        let tuneInfo = document.createElement('div');
+        tuneInfo.classList.add('tuneInfo');
+
+        let volumeBarBackground = document.createElement('div');
+        volumeBarBackground.classList.add('volumeBarBackground');
+
+        let volumeBarVolume = document.createElement('div');
+        volumeBarVolume.classList.add('volumeBarVolume');
+
+        let volumeBarTarget = document.createElement('div');
+        volumeBarTarget.classList.add('volumeBarTarget');
+
+        tuneInfo.appendChild(volumeBarBackground);
+        tuneInfo.appendChild(volumeBarVolume);
+        tuneInfo.appendChild(volumeBarTarget);
+
+
+
+        /////////////////////////////////////////////////////////
 
         // add created elems 
-        playerContainer.appendChild(tempDivElement);
+        playerContainer.appendChild(swapDiv);
+        playerContainer.appendChild(tuneInfo);
         document.getElementById('playerContainerSection').appendChild(playerContainer);
         document.getElementById('playerContainer' + String(id)).appendChild(picker);
-        document.getElementById(tempDivElement.id).classList.add('player');
+        document.getElementById(swapDiv.id).classList.add('player');
 
         // build YT.Player object
         let videoId = this.getVideoId(url)
 
-        let player = new YT.Player(tempDivElement.id, {
+        let player = new YT.Player(swapDiv.id, {
 
             videoId: videoId,
             playerVars: {
@@ -390,12 +453,18 @@ class Tune {
         this.faidTarget = 100;
         this.delayCounter = 0;
         this.stepSize = 1;
-        //this.playerReady = false;
-        this.describtion = "no describtion";
+
+        this.tuneInfo = tuneInfo;
+        this.volumeBarBackground = volumeBarBackground;
+        this.volumeBarVolume = volumeBarVolume;
+        this.volumeBarTarget = volumeBarTarget;
+
 
         this.player = player;
+        this.describtion = describtion;
         this.picker = picker;
         this.container = playerContainer;
+
     }
 
     // video-url to videoId
@@ -404,13 +473,5 @@ class Tune {
         let regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/; // ???
         let match = url.match(regExp);
         return (match && match[7].length == 11) ? match[7] : false;
-    }
-    // randomRGB for viz distinction
-    randomRGB() {
-
-        let r = Math.floor(Math.random() * 255);
-        let g = Math.floor(Math.random() * 255);
-        let b = Math.floor(Math.random() * 255);
-        return "rgb(" + r + "," + g + "," + b + ")";
     }
 }

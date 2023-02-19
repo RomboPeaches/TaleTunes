@@ -17,8 +17,8 @@
 }
 
 body {
+    /* bc firefox fixed elem issue*/
     height: 100%;
-    /* bc firefox fixed issue*/
     background-color: black;
 }
 
@@ -28,7 +28,8 @@ body {
     font-size: 0px;
     position: fixed;
     text-align: right;
-    padding-right: 14px;
+    padding-left: 14px;
+    padding-top: 14px;
 }
 
 #taleTunesLettersContainer {
@@ -44,6 +45,14 @@ body {
 }
 
 #taleTunesLetters {
+
+    -webkit-user-select: none;
+    /* Safari */
+    -ms-user-select: none;
+    /* IE 10 and IE 11 */
+    user-select: none;
+    /* Standard syntax */
+
     position: relative;
     width: 160px;
     height: 160px;
@@ -57,6 +66,13 @@ body {
 }
 
 .divButton {
+    -webkit-user-select: none;
+    /* Safari */
+    -ms-user-select: none;
+    /* IE 10 and IE 11 */
+    user-select: none;
+    /* Standard syntax */
+
     width: 80px;
     height: 55px;
     margin-left: 14px;
@@ -80,7 +96,7 @@ body {
 
 .playerContainerSection {
     left: 228px;
-    padding-top: 0px;
+    padding-top: 14px;
     width: calc(100vw - 228px);
     font-size: 0;
     text-align: left;
@@ -88,34 +104,87 @@ body {
 }
 
 .playerContainer {
+    display: inline-grid;
     width: var(--player-width);
     height: var(--player-height);
-    display: inline-grid;
-    overflow: hidden;
     border-radius: 7px;
-    margin: 14px;
+    padding-left: 14px;
+    padding-bottom: 14px;
+    margin-left: 14px;
+    margin-top: 14px;
 }
 
 .picker {
-    width: var(--player-width);
-    height: var(--player-height);
+
     position: absolute;
     border-radius: 7px;
-    background-color: white;
-    opacity: 0.1;
+    padding: 7px;
+    transition: 1s;
+    font-size: 1rem;
+    color: white;
+    text-align: left;
+    font-weight: 999;
+    width: var(--player-width);
+    height: var(--player-height);
+
 }
 
 .picker:hover {
-    /*opacity: 0.7 !important;*/
-    transition: opacity 0.1s !important;
+    transition: all 0.5s !important;
 }
 
 .player {
+    position: absolute;
     width: 200px;
     height: 200px;
-    translate: -0px -0px;
     font-size: 0rem;
     pointer-events: none;
+
 }
 
-@media (max-width:500px) {}
+.tuneInfo {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    border-radius: 7px;
+    padding: 7px 7px;
+    background-color: green;
+    z-index: 1;
+    opacity: 0.5;
+}
+
+.volumeBarBackground {
+    position: absolute;
+    width: 14px;
+    right: calc(0px + 14px);
+    height: calc(100% - 14px);
+    background-color: yellow;
+    border-radius: 7px;
+    opacity: 0.5;
+}
+
+.volumeBarVolume {
+    position: relative;
+    bottom: 0;
+    width: 14px;
+    height: 100%;
+    background-color: red;
+    border-radius: 7px;
+    opacity: 1.0;
+}
+
+.volumeBarTarget {
+    display: none;
+    position: relative;
+    width: 20px;
+    height: 16px;
+    background-color: blueviolet;
+    border-radius: 7px;
+    opacity: 1.0;
+}
+
+@media (max-width:500px) {
+    * {
+        display: none;
+    }
+}
