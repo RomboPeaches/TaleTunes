@@ -2,20 +2,13 @@
 
     color: p;
 
-    --body-and-picker-and-logo-text: #3D348B;
-
-    --logo-bg: black;
-    --logo-text: #3D348B;
-
-    --btn: black;
-    --btn-text: #3D348B;
-    --btn-hover: #F18701;
-
-    --info-text: #3D3488;
+    --color-1: white;
+    --color-2: black;
 
     --player-width: 200px;
     --player-height: 200px;
 }
+
 
 * {
     font-family: 'Helvetica', sans-serif;
@@ -24,17 +17,9 @@
 }
 
 body {
+    /* bc firefox fixed elem issue*/
     height: 100%;
-    /* bc firefox fixed issue*/
-    background-color: var(--body-and-picker-and-logo-text);
-}
-
-#allSections {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    transition: translate 1s;
-    translate: -100%;
+    background-color: black;
 }
 
 .playerControllerSection {
@@ -43,22 +28,31 @@ body {
     font-size: 0px;
     position: fixed;
     text-align: right;
-    padding-right: 14px;
+    padding-left: 14px;
+    padding-top: 14px;
 }
 
-#taleTunesContainer {
+#taleTunesLettersContainer {
     position: relative;
     display: inline-grid;
     margin-top: 14px;
     width: 200px;
     height: 320px;
     font-size: 0px;
-    background-color: var(--logo-bg);
+    background-color: white;
     border-radius: 7px;
     margin-bottom: 14px;
 }
 
-#taleTunes {
+#taleTunesLetters {
+
+    -webkit-user-select: none;
+    /* Safari */
+    -ms-user-select: none;
+    /* IE 10 and IE 11 */
+    user-select: none;
+    /* Standard syntax */
+
     position: relative;
     width: 160px;
     height: 160px;
@@ -68,21 +62,17 @@ body {
     font-size: 3rem;
     text-align: center;
     font-weight: 999;
-
-    color: var(--info-text);
-}
-
-#tLetter {
-    position: relative;
-    translate: -1.5px -116px;
-    transition: opacity 2s;
-    opacity: 1;
-    font-size: 3rem;
-    color: orange;
-    font-weight: 1000;
+    color: black;
 }
 
 .divButton {
+    -webkit-user-select: none;
+    /* Safari */
+    -ms-user-select: none;
+    /* IE 10 and IE 11 */
+    user-select: none;
+    /* Standard syntax */
+
     width: 80px;
     height: 55px;
     margin-left: 14px;
@@ -90,86 +80,111 @@ body {
     padding: 6.5px;
     text-align: left;
     font-size: 16px;
-    font-weight: 499;
+    font-weight: 1;
     border-radius: 7px;
     position: relative;
     display: inline-grid;
-    color: var(--btn-text);
-    background-color: var(--btn);
+    color: black;
+    background-color: white;
+    transition: 0.2s;
 }
 
 .divButton:hover {
-    background-color: var(--btn-hover);
-
+    background-color: rgb(40, 40, 40);
+    color: white;
 }
 
 .playerContainerSection {
-    left: 214px;
-    padding-top: 7px;
-    width: calc(100vw - 214px);
+    left: 228px;
+    padding-top: 14px;
+    width: calc(100vw - 228px);
     font-size: 0;
-    text-align: center;
+    text-align: left;
     position: absolute;
-}
-
-#topDiv {
-    display: inline-grid;
-    width: calc(100vw - 214px);
-    height: 200px;
-    background-color: black;
-    color: white;
-    font-size: 1rem;
-    font-weight: 999;
-    text-align: left;
-    border-radius: 7px;
-    margin-bottom: 7px;
-
-}
-
-#infoText {
-    translate: 215px 80px;
-    position: fixed;
-    background-color: white;
-    width: 100%;
-    height: 22px;
-    text-align: left;
-    font-size: 1rem;
-    padding-left: 7px;
-    padding-top: 7px;
-    z-index: 1;
-    color: var(--info-text);
-    pointer-events: none;
 }
 
 .playerContainer {
+    display: inline-grid;
     width: var(--player-width);
     height: var(--player-height);
-    padding: 7px;
     border-radius: 7px;
-    display: inline-block;
+    padding-left: 14px;
+    padding-bottom: 14px;
+    margin-left: 14px;
+    margin-top: 14px;
 }
 
 .picker {
-    width: var(--player-width);
-    height: var(--player-height);
-    text-align: center;
+
     position: absolute;
     border-radius: 7px;
-    opacity: 0.0;
-    background-color: black;
-    pointer-events: none;
+    padding: 7px;
+    transition: 1s;
+    font-size: 1rem;
+    color: white;
+    text-align: left;
+    font-weight: 999;
+    width: var(--player-width);
+    height: var(--player-height);
+
 }
 
 .picker:hover {
-    opacity: 0.0 !important;
-    transition: opacity 0.1s !important;
+    transition: all 0.5s !important;
 }
 
 .player {
-    width: var(--player-width);
-    height: var(--player-height);
-    font-size: 1rem;
-    border-radius: 7px;
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    font-size: 0rem;
+    pointer-events: none;
+
 }
 
-@media (max-width:500px) {}
+.tuneInfo {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    border-radius: 7px;
+    padding: 7px 7px;
+    background-color: green;
+    z-index: 1;
+    opacity: 0.5;
+}
+
+.volumeBarBackground {
+    position: absolute;
+    width: 14px;
+    right: calc(0px + 14px);
+    height: calc(100% - 14px);
+    background-color: yellow;
+    border-radius: 7px;
+    opacity: 0.5;
+}
+
+.volumeBarVolume {
+    position: relative;
+    bottom: 0;
+    width: 14px;
+    height: 100%;
+    background-color: red;
+    border-radius: 7px;
+    opacity: 1.0;
+}
+
+.volumeBarTarget {
+    display: none;
+    position: relative;
+    width: 20px;
+    height: 16px;
+    background-color: blueviolet;
+    border-radius: 7px;
+    opacity: 1.0;
+}
+
+@media (max-width:500px) {
+    * {
+        display: none;
+    }
+}
