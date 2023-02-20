@@ -1,28 +1,16 @@
-// TODO
+// webpage to share TuneGroup Safefiles (legal issues? hosting?)
 
-// webpage to share TuneGroup Safefiles: name? legal issues? hosting?
+// fading function last set target and new traget ???  
 
-// istead dist or rule based fading :
-// -> fade function this.tune.fadefoo = f(target, nowVol) ?!?!!??! 
+// import, export tune groups
 
-// drag and drop url saved urls and settings?!
+// fix slowed or stopped setInterval when tab not "activ" ???
 
-// forbid selection until a player ready
+// remove obsolete ids picker0, ...
 
-// save via json file
+// volume steps are more intuetiv 20 + 20 + ...
 
-// slowed or stopped setInterval function fix?
-
-// add tunes (urls)
-
-// tooltip for describtion and way to add descriptions
-
-// are the tune elem's ids i.e. picker, container, player obsolete?
-
-// visualize volume
-
-// when a command button is pushed and no tunes are seleted,
-// indicate that there are no tunes selected, selct by ...
+// show | hie thumbnails
 
 
 // randomRGB
@@ -88,29 +76,29 @@ function onYouTubeIframeAPIReady() {
     tuneGroup = new TuneGroup();
 
     //tuneGroup.createTune(defaultUrls);
-    tuneGroup.createTune(defaultUrls.slice(0, 4));
+    tuneGroup.createTune(defaultUrls.slice(0, 7));
 }
 
 // called when a player is ready
 function onPlayerReady(event) {
 
-    let playersTune = tuneGroup.tunes[event.target.id - 1];
+    let currentIndex = event.target.id - 1;
 
-    // to use previously used images for img idex beyond traget.id
-    let randomImageIndex = (event.target.id - 1) % 18;
-    console.log(randomImageIndex);
+    // current tune referencing the player, ...
+    let tune = tuneGroup.tunes[currentIndex];
 
-    playersTune.picker.style = 'background-image: url("images/tuneImages/img' + randomImageIndex + '.jpeg")';
+    // ready anim, set bg image
+    tune.picker.style.fontSize = '1rem';
+    tune.picker.style = 'background-image: url("images/tuneImages/img' + currentIndex + '.jpeg")';
+    tune.picker.style.opacity = '0.4';
 
-    playersTune.picker.style.opacity = '0.4';
-    playersTune.picker.style.fontSize = '1rem';
+    // set video's describtion text to video's title
+    tune.videoDesribtion.innerHTML = event.target.getVideoData().title;
 
-    // set describtion to video's title
-    playersTune.picker.innerHTML = event.target.getVideoData().title;
+    // set tuneInfo opacitiy
+    tune.tuneInfo.style.opacity = "1.0";
 
-
-    setTimeout(function() {}, 1000);
-
+    // update next tune
     tuneGroup.updateTunes();
 }
 
@@ -157,9 +145,7 @@ class TuneGroup {
                 } else {
                     tune.selected = false;
                     tune.picker.style.opacity = 0.4; // if not selected
-
                 }
-
             }
             // add tune object to group.tunes 
             this.tunes.push(tune);
@@ -167,30 +153,33 @@ class TuneGroup {
     }
 
     // update volume based on fadeTarget of each tune
+    // and the visualisation elems positions
     updateVolumes() {
 
         this.tunes.forEach(tune => {
+            try { /* in case a player has not been ready */
+                // position faid target elem
+                let newFadeTargetTranslateValue = '182px ' + (193 - (2 * tune.faidTarget)) + 'px';
+                tune.volumeBarTarget.style.translate = newFadeTargetTranslateValue;
 
-            try {
+                // change volumeBarTargets color based on playing state
+                let updatedColor = 'hotpink';
+                if (tune.player.getPlayerState() == 1) {
+                    updatedColor = 'dodgerblue';
+                } else { updatedColor = 'cornsilk' }
+                tune.volumeBarTarget.style.backgroundColor = updatedColor;
+            } catch { /* in case a player has not been ready */ }
 
+            try { /* in case a player has not been ready */
                 let volumeNow = tune.player.getVolume();
+                // update volumeBarVolume height
+                tune.volumeBarVolume.style.height = (tune.player.getVolume() * 2) + 'px';
+
                 // if not done fading
                 if (volumeNow != tune.faidTarget) {
 
                     tune.stepSize = 1;
-
                     let close = false; // when close to target
-                    if (Math.abs(volumeNow - tune.faidTarget) < 10) {
-
-                        // slow fading 
-                        if (tune.delayCounter > 4) {
-                            tune.stepSize = 1;
-                            tune.delayCounter = 0;
-                        } else {
-                            tune.delayCounter += 1;
-                            tune.stepSize = 0;
-                        }
-                    }
 
                     // increase or ...
                     if (volumeNow < tune.faidTarget) {
@@ -200,16 +189,32 @@ class TuneGroup {
                         tune.player.setVolume(volumeNow - tune.stepSize)
                     }
                     console.log("vol:", volumeNow);
-
                 }
-
-
             } catch { /* in case a player has not been ready */ }
         });
     }
 
+    noSelectionInfo(info = "selection is empty") {
+        // inform user no tune selected
+        let noneSelected = true;
+        this.tunes.forEach(tune => {
+            if (tune.selected) { noneSelected = false; }
+        });
+        if (noneSelected == true) {
+            let infoTextElem = document.getElementById('infoText');
+            infoTextElem.style.opacity = '1.0'
+            infoTextElem.innerHTML = info;
+
+            setTimeout(function() {
+                infoTextElem.style.opacity = '0.0';
+            }, 3000);
+        }
+    }
+
     // play selected tunes
     playSelected() {
+
+        this.noSelectionInfo();
 
         let numSelected = 0;
         this.tunes.forEach(tune => {
@@ -223,6 +228,8 @@ class TuneGroup {
 
     // pause selected tunes
     pauseSelected() {
+
+        this.noSelectionInfo();
 
         this.tunes.forEach(tune => {
             if (tune.selected == true) {
@@ -254,6 +261,8 @@ class TuneGroup {
     // resets selected tunes
     resetSelected() {
 
+        this.noSelectionInfo();
+
         this.tunes.forEach(tune => {
             if (tune.selected == true) {
                 tune.selected = false;
@@ -266,6 +275,8 @@ class TuneGroup {
     // remove tune
     removeSelected() {
 
+        this.noSelectionInfo();
+
         this.tunes.forEach(tune => {
             if (tune.selected == true) {
                 tune.player.pauseVideo();
@@ -276,6 +287,8 @@ class TuneGroup {
 
     // sets volume faid target to 100
     faidInSelected() {
+
+        this.noSelectionInfo();
 
         this.tunes.forEach(tune => {
             if (tune.selected == true) {
@@ -296,6 +309,8 @@ class TuneGroup {
     // sets volume faid target to 0
     faidOutSelected() {
 
+        this.noSelectionInfo();
+
         this.tunes.forEach(tune => {
             if (tune.selected == true) {
                 tune.selected = false;
@@ -308,42 +323,44 @@ class TuneGroup {
     // increase volume step
     volumeStepIncrease() {
 
+        this.noSelectionInfo();
+
         this.tunes.forEach(tune => {
             if (tune.selected == true) {
-
-                let newTarget = tune.player.getVolume() + 25;
-                if (newTarget > 100) { newTarget = 100; }
-
-                tune.faidTarget = newTarget;
-                console.log("newTarget: ", newTarget);
+                let target = Math.round((tune.faidTarget + 20) / 10) * 10;
+                if (target > 100) { traget = 100; }
+                tune.faidTarget = target;
             }
+
         });
     }
 
     // decrease volume step
     volumeStepDecrease() {
 
+        this.noSelectionInfo();
+
         this.tunes.forEach(tune => {
             if (tune.selected == true) {
-
-                let newTarget = tune.player.getVolume() - 25;
-                if (newTarget < 0) { newTarget = 0; }
-
-                tune.faidTarget = newTarget;
-                console.log("newTarget: ", newTarget);
+                let target = Math.round((tune.faidTarget - 20) / 10) * 10;
+                if (target < 0) { traget = 0; }
+                tune.faidTarget = target;
             }
+
         });
     }
 
     // mute by setting volume to 0 immediately
     muteSelected() {
 
+        this.noSelectionInfo();
+
         this.tunes.forEach(tune => {
             if (tune.selected == true) {
                 tune.selected = false;
                 tune.picker.style.opacity = 0.4;
-                tune.player.setVolume(0);
                 tune.faidTarget = 0;
+                tune.player.setVolume(0);
             }
         });
     }
@@ -351,12 +368,14 @@ class TuneGroup {
     // unmute by setting volume to 100 immediately
     unMuteSelected() {
 
+        this.noSelectionInfo();
+
         this.tunes.forEach(tune => {
             if (tune.selected == true) {
                 tune.selected = false;
                 tune.picker.style.opacity = 0.4;
-                tune.faidTarget = 0;
                 tune.player.setVolume(100);
+                tune.faidTarget = 100;
             }
         });
     }
@@ -375,17 +394,13 @@ class Tune {
         playerContainer.classList.add('playerContainer');
 
         // create picker div to tint if selected and fade in effect
-        let picker = document.createElement('player');
+        let picker = document.createElement('div');
         picker.id = 'picker' + id;
         picker.classList.add('picker');
-
-        // pick random picker flash msg and flash image?
-        let randomImage = Math.floor(Math.random() * 16)
         picker.style.backgroundPosition = '-156px -156px';
-        //picker.style.backgroundColor = 'black';
         picker.style.color = 'white';
 
-        //picker.onclick = function(event) {}
+        picker.onclick = function(event) {}
         picker.onmouseover = function(event) {}
         picker.onmouseleave = function(event) {}
 
@@ -393,7 +408,7 @@ class Tune {
         let swapDiv = document.createElement('div');
         swapDiv.id = 'player' + id;
 
-        // volume visualisation divs /////////////////////////////
+        // volume fade visualisation divs
         let tuneInfo = document.createElement('div');
         tuneInfo.classList.add('tuneInfo');
 
@@ -406,13 +421,13 @@ class Tune {
         let volumeBarTarget = document.createElement('div');
         volumeBarTarget.classList.add('volumeBarTarget');
 
+        let videoDescribtionDiv = document.createElement('div');
+        videoDescribtionDiv.classList.add('videoDescribtionDiv');
+
         tuneInfo.appendChild(volumeBarBackground);
         tuneInfo.appendChild(volumeBarVolume);
         tuneInfo.appendChild(volumeBarTarget);
-
-
-
-        /////////////////////////////////////////////////////////
+        tuneInfo.appendChild(videoDescribtionDiv);
 
         // add created elems 
         playerContainer.appendChild(swapDiv);
@@ -458,6 +473,7 @@ class Tune {
         this.volumeBarBackground = volumeBarBackground;
         this.volumeBarVolume = volumeBarVolume;
         this.volumeBarTarget = volumeBarTarget;
+        this.videoDesribtion = videoDescribtionDiv;
 
 
         this.player = player;
