@@ -1,16 +1,17 @@
 // webpage to share TuneGroup Safefiles (legal issues? hosting?)
 
-// fading function last set target and new traget ???  
+// show | hide thumbnails | settings
 
-// import, export tune groups
+// remove obsolete ids picker0, ... 
 
 // fix slowed or stopped setInterval when tab not "activ" ???
 
-// remove obsolete ids picker0, ...
+// viz buffering
 
-// volume steps are more intuetiv 20 + 20 + ...
+// shortcuts?!
 
-// show | hie thumbnails
+// add tunes (urls), import, export tune groups
+
 
 
 // randomRGB
@@ -139,6 +140,8 @@ class TuneGroup {
             // add onlick function the new tunes picker elem
             tune.picker.onclick = function() {
 
+                document.getElementById('infoText').innerHTML = "Press i.e. play, to play the selected Tunes."
+
                 if (tune.selected == false) {
                     tune.selected = true;
                     tune.picker.style.opacity = 1.0; // if selected
@@ -159,13 +162,13 @@ class TuneGroup {
         this.tunes.forEach(tune => {
             try { /* in case a player has not been ready */
                 // position faid target elem
-                let newFadeTargetTranslateValue = '182px ' + (193 - (2 * tune.faidTarget)) + 'px';
+                let newFadeTargetTranslateValue = '182px ' + (172 - ((172 / 100) * tune.faidTarget) + 7) + 'px';
                 tune.volumeBarTarget.style.translate = newFadeTargetTranslateValue;
 
                 // change volumeBarTargets color based on playing state
                 let updatedColor = 'hotpink';
                 if (tune.player.getPlayerState() == 1) {
-                    updatedColor = 'dodgerblue';
+                    updatedColor = 'var(--signal-color)';
                 } else { updatedColor = 'cornsilk' }
                 tune.volumeBarTarget.style.backgroundColor = updatedColor;
             } catch { /* in case a player has not been ready */ }
@@ -173,7 +176,7 @@ class TuneGroup {
             try { /* in case a player has not been ready */
                 let volumeNow = tune.player.getVolume();
                 // update volumeBarVolume height
-                tune.volumeBarVolume.style.height = (tune.player.getVolume() * 2) + 'px';
+                tune.volumeBarVolume.style.height = ((176 / 100) * tune.player.getVolume()) + 'px';
 
                 // if not done fading
                 if (volumeNow != tune.faidTarget) {
@@ -200,14 +203,16 @@ class TuneGroup {
         this.tunes.forEach(tune => {
             if (tune.selected) { noneSelected = false; }
         });
+        let infoTextElem = document.getElementById('infoText');
         if (noneSelected == true) {
-            let infoTextElem = document.getElementById('infoText');
             infoTextElem.style.opacity = '1.0'
             infoTextElem.innerHTML = info;
-
             setTimeout(function() {
                 infoTextElem.style.opacity = '0.0';
             }, 3000);
+        } else {
+            // hide infoTextMessage
+            infoTextElem.style.opacity = '0.0';
         }
     }
 

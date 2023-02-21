@@ -1,6 +1,10 @@
 :root {
     --player-width: 200px;
     --player-height: 200px;
+
+    --dark-color: black;
+    --light-color: cornsilk;
+    --signal-color: deeppink;
 }
 
 * {
@@ -12,7 +16,7 @@
 body {
     /* bc firefox fixed elem issue*/
     height: 100%;
-    background-color: black;
+    background-color: var(--dark-color);
 }
 
 .playerControllerSection {
@@ -34,8 +38,7 @@ body {
     font-size: 0px;
     border-radius: 7px;
     margin-bottom: 14px;
-    background-image: url("images/tuneImages/img4.jpeg") background-color: rgb(40, 40, 40);
-    background-color: dodgerblue;
+    background-image: url("images/tuneImages/img4.jpeg");
 }
 
 #taleTunesLetters {
@@ -47,15 +50,16 @@ body {
     /* Standard syntax */
 
     position: relative;
-    width: 160px;
+    width: 90px;
     height: 160px;
+    padding-top: 56px;
     left: 50%;
     top: 50%;
     translate: -50% -54%;
-    font-size: 3rem;
+    font-size: 2rem;
     text-align: center;
     font-weight: 999;
-    color: black;
+    color: var(--bg-color);
 }
 
 .divButton {
@@ -66,24 +70,27 @@ body {
     user-select: none;
     /* Standard syntax */
 
-    width: 80px;
-    height: 55px;
+    width: 78px;
+    height: 49px;
     margin-left: 14px;
     margin-bottom: 14px;
     padding: 6.5px;
-    text-align: left;
+    text-align: center;
     font-size: 16px;
-    font-weight: 1;
+    font-weight: 0;
     border-radius: 7px;
     position: relative;
     display: inline-grid;
-    color: cornsilk;
-    background-color: rgb(40, 40, 40);
+    color: var(--light-color);
+    background-color: none;
     transition: 0.2s;
+    border: dashed 1px;
+    border-color: var(--light-color);
 }
 
 .divButton:hover {
-    background-color: dodgerblue;
+    background-color: var(--light-color);
+    color: black;
 }
 
 .playerContainerSection {
@@ -112,7 +119,7 @@ body {
     padding: 7px;
     transition: 1s;
     font-size: 1rem;
-    color: cornsilk;
+    color: var(--light-color);
     text-align: left;
     font-weight: 999;
     width: var(--player-width);
@@ -164,7 +171,7 @@ body {
     width: 160px;
     height: 175px;
     padding-top: 20px;
-    color: cornsilk;
+    color: var(--light-color);
     font-size: 1rem;
 }
 
@@ -172,9 +179,9 @@ body {
     position: absolute;
     width: 7px;
     right: 14px;
-    height: 200px;
+    height: 176px;
     background-color: black;
-    bottom: 7px;
+    bottom: 18px;
     border-radius: 7px;
 }
 
@@ -182,12 +189,11 @@ body {
     position: absolute;
     width: 7px;
     right: 14px;
-    height: 200px;
-    height: 200px;
-    background-color: cornsilk;
+    height: 176px;
+    background-color: var(--light-color);
     border-radius: 7px;
     opacity: 1.0;
-    bottom: 7px;
+    bottom: 18px;
     transition: height 0.2s;
 }
 
@@ -196,9 +202,9 @@ body {
     position: absolute;
     width: 15px;
     height: 15px;
-    translate: 182px 193px;
-    translate: 182px -7px;
-    background-color: cornsilk;
+    translate: 192px 193px;
+    translate: 192px -7px;
+    background-color: var(--light-color);
     border-radius: 7px;
     opacity: 1.0;
     transition: translate 0.5s;
@@ -206,14 +212,14 @@ body {
 
 #infoText {
     position: relative;
-    font-size: 2rem;
+    font-size: 1rem;
     font-weight: 0;
-    color: cornsilk;
+    color: var(--light-color);
     line-height: 0px;
     padding-bottom: 7px;
-    padding-left: 28px;
-    padding-top: 0px;
-    opacity: 0.0;
+    padding-left: 31px;
+    padding-top: 42px;
+    opacity: 1.0;
     transition: opacity 0.5s;
 }
 
