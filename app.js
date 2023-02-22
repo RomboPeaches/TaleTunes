@@ -1,6 +1,6 @@
 // webpage to share TuneGroup Safefiles (legal issues? hosting?)
 
-// show | hide thumbnails | settings
+// show loaded tunegroup name, where?// show | hide thumbnails | settings | toggle or when adding url
 
 // remove obsolete ids picker0, ... 
 
@@ -8,10 +8,18 @@
 
 // viz buffering
 
-// shortcuts?!
+// shortcuts?! i.e. A select all ...
 
-// add tunes (urls), import, export tune groups
+// import, export tune groups
 
+// add tune as pseudo tune elem, last in container, just url
+
+// edit tunes menu:
+// --- generated image | use thumbnail | url image, 
+// --- describtion | yt vid title
+// --- --- title
+// --- --- image
+// --- --- url
 
 
 // randomRGB
@@ -19,7 +27,7 @@ function randomRGB() {
     let r = Math.floor(Math.random() * 255);
     let g = Math.floor(Math.random() * 255);
     let b = Math.floor(Math.random() * 255);
-    return "rgb(" + r + "," + g + "," + b + ")";
+    return 'rgb(' + r + ',' + g + ',' + b + ')';
 }
 
 let defaultUrls = [
@@ -76,8 +84,12 @@ function onYouTubeIframeAPIReady() {
 
     tuneGroup = new TuneGroup();
 
-    //tuneGroup.createTune(defaultUrls);
-    tuneGroup.createTune(defaultUrls.slice(0, 7));
+    // translate playerControllerSetion into frame
+    document.getElementById('playerControllerSection').style = "translate: 0px";
+    // translate infoText into frame
+    document.getElementById('infoText').style = "translate: 0px";
+
+    tuneGroup.createTune(defaultUrls.slice(0, 3));
 }
 
 // called when a player is ready
@@ -87,18 +99,14 @@ function onPlayerReady(event) {
 
     // current tune referencing the player, ...
     let tune = tuneGroup.tunes[currentIndex];
-
-    // ready anim, set bg image
+    // ready animation and set tune bg image
     tune.picker.style.fontSize = '1rem';
     tune.picker.style = 'background-image: url("images/tuneImages/img' + currentIndex + '.jpeg")';
-    tune.picker.style.opacity = '0.4';
-
+    tune.picker.style.opacity = '0.2';
     // set video's describtion text to video's title
     tune.videoDesribtion.innerHTML = event.target.getVideoData().title;
-
     // set tuneInfo opacitiy
     tune.tuneInfo.style.opacity = "1.0";
-
     // update next tune
     tuneGroup.updateTunes();
 }
@@ -115,6 +123,8 @@ class TuneGroup {
 
         this.urls = [];
         this.tunes = [];
+
+        this.dropSelectionAfterCommands = false;
 
         setInterval(function() {
             tuneGroup.updateVolumes();
@@ -140,14 +150,14 @@ class TuneGroup {
             // add onlick function the new tunes picker elem
             tune.picker.onclick = function() {
 
-                document.getElementById('infoText').innerHTML = "Press i.e. play, to play the selected Tunes."
+                document.getElementById('infoText').innerHTML = 'Press i.e. play, to play the selected Tunes.';
 
                 if (tune.selected == false) {
                     tune.selected = true;
                     tune.picker.style.opacity = 1.0; // if selected
                 } else {
                     tune.selected = false;
-                    tune.picker.style.opacity = 0.4; // if not selected
+                    tune.picker.style.opacity = 0.2; // if not selected
                 }
             }
             // add tune object to group.tunes 
@@ -166,11 +176,12 @@ class TuneGroup {
                 tune.volumeBarTarget.style.translate = newFadeTargetTranslateValue;
 
                 // change volumeBarTargets color based on playing state
-                let updatedColor = 'hotpink';
+                let updatedColor = 'red';
                 if (tune.player.getPlayerState() == 1) {
                     updatedColor = 'var(--signal-color)';
                 } else { updatedColor = 'cornsilk' }
                 tune.volumeBarTarget.style.backgroundColor = updatedColor;
+                tune.volumeBarVolume.style.backgroundColor = updatedColor;
             } catch { /* in case a player has not been ready */ }
 
             try { /* in case a player has not been ready */
@@ -191,13 +202,13 @@ class TuneGroup {
                         // ... decrease Volume
                         tune.player.setVolume(volumeNow - tune.stepSize)
                     }
-                    console.log("vol:", volumeNow);
+                    console.log('vol:', volumeNow);
                 }
             } catch { /* in case a player has not been ready */ }
         });
     }
 
-    noSelectionInfo(info = "selection is empty") {
+    noSelectionInfo(info = 'No tunes are selected.') {
         // inform user no tune selected
         let noneSelected = true;
         this.tunes.forEach(tune => {
@@ -209,12 +220,14 @@ class TuneGroup {
             infoTextElem.innerHTML = info;
             setTimeout(function() {
                 infoTextElem.style.opacity = '0.0';
+                setTimeout(function() {
+                    infoTextElem.style.opacity = '1.0';
+                    infoTextElem.innerHTML = 'Press i.e. play, to play the selected Tunes.';
+                }, 3000);
             }, 3000);
-        } else {
-            // hide infoTextMessage
-            infoTextElem.style.opacity = '0.0';
         }
     }
+
 
     // play selected tunes
     playSelected() {
@@ -224,8 +237,10 @@ class TuneGroup {
         let numSelected = 0;
         this.tunes.forEach(tune => {
             if (tune.selected == true) {
-                tune.selected = false;
-                tune.picker.style.opacity = 0.4;
+                if (this.dropSelectionAfterCommands) {
+                    tune.selected = false;
+                    tune.picker.style.opacity = 0.4;
+                }
                 tune.player.playVideo();
             }
         });
@@ -238,8 +253,10 @@ class TuneGroup {
 
         this.tunes.forEach(tune => {
             if (tune.selected == true) {
-                tune.selected = false;
-                tune.picker.style.opacity = 0.4;
+                if (this.dropSelectionAfterCommands) {
+                    tune.selected = false;
+                    tune.picker.style.opacity = 0.4;
+                }
                 tune.player.pauseVideo();
             }
         });
@@ -259,7 +276,7 @@ class TuneGroup {
 
         this.tunes.forEach(tune => {
             tune.selected = false;
-            tune.picker.style.opacity = 0.4;
+            tune.picker.style.opacity = 0.2;
         });
     }
 
@@ -270,8 +287,10 @@ class TuneGroup {
 
         this.tunes.forEach(tune => {
             if (tune.selected == true) {
-                tune.selected = false;
-                tune.picker.style.opacity = 0.4;
+                if (this.dropSelectionAfterCommands) {
+                    tune.selected = false;
+                    tune.picker.style.opacity = 0.4;
+                }
                 tune.player.stopVideo();
             }
         });
@@ -303,8 +322,10 @@ class TuneGroup {
                     tune.player.setVolume(0);
                     tune.player.playVideo();
                 }
-                tune.selected = false;
-                tune.picker.style.opacity = 0.4;
+                if (this.dropSelectionAfterCommands) {
+                    tune.selected = false;
+                    tune.picker.style.opacity = 0.4;
+                }
                 tune.player.playVideo();
                 tune.faidTarget = 100;
             }
@@ -318,8 +339,10 @@ class TuneGroup {
 
         this.tunes.forEach(tune => {
             if (tune.selected == true) {
-                tune.selected = false;
-                tune.picker.style.opacity = 0.4;
+                if (this.dropSelectionAfterCommands) {
+                    tune.selected = false;
+                    tune.picker.style.opacity = 0.4;
+                }
                 tune.faidTarget = 0;
             }
         });
@@ -335,6 +358,11 @@ class TuneGroup {
                 let target = Math.round((tune.faidTarget + 20) / 10) * 10;
                 if (target > 100) { traget = 100; }
                 tune.faidTarget = target;
+
+                if (this.dropSelectionAfterCommands) {
+                    tune.selected = false;
+                    tune.picker.style.opacity = 0.4;
+                }
             }
 
         });
@@ -350,8 +378,12 @@ class TuneGroup {
                 let target = Math.round((tune.faidTarget - 20) / 10) * 10;
                 if (target < 0) { traget = 0; }
                 tune.faidTarget = target;
-            }
 
+                if (this.dropSelectionAfterCommands) {
+                    tune.selected = false;
+                    tune.picker.style.opacity = 0.4;
+                }
+            }
         });
     }
 
@@ -362,8 +394,10 @@ class TuneGroup {
 
         this.tunes.forEach(tune => {
             if (tune.selected == true) {
-                tune.selected = false;
-                tune.picker.style.opacity = 0.4;
+                if (this.dropSelectionAfterCommands) {
+                    tune.selected = false;
+                    tune.picker.style.opacity = 0.4;
+                }
                 tune.faidTarget = 0;
                 tune.player.setVolume(0);
             }
@@ -377,8 +411,10 @@ class TuneGroup {
 
         this.tunes.forEach(tune => {
             if (tune.selected == true) {
-                tune.selected = false;
-                tune.picker.style.opacity = 0.4;
+                if (this.dropSelectionAfterCommands) {
+                    tune.selected = false;
+                    tune.picker.style.opacity = 0.4;
+                }
                 tune.player.setVolume(100);
                 tune.faidTarget = 100;
             }
@@ -391,7 +427,7 @@ class TuneGroup {
 // aswell as the tune related info and functionality, ...
 class Tune {
 
-    constructor(url, id, describtion = "default") {
+    constructor(url, id, describtion = 'default') {
 
         // create a container for player positioning
         let playerContainer = document.createElement('div');

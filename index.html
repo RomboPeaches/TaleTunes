@@ -6,25 +6,24 @@
 </head>
 
 <body>
-    <div class="playerControllerSection">
+    <div id="playerControllerSection">
         <div id="taleTunesLettersContainer">
             <div id="taleTunesLetters">T A L E T U N E S</div>
         </div>
         <div onclick="tuneGroup.selectAll()" class="divButton">select all</div>
-        <div onclick="tuneGroup.clearSelection()" class="divButton">clear selection</div>
+        <div onclick="tuneGroup.clearSelection()" class="divButton">clear</div>
         <div onclick="tuneGroup.playSelected()" class="divButton">play</div>
         <div onclick="tuneGroup.pauseSelected()" class="divButton">pause</div>
-        <div onclick="tuneGroup.faidInSelected()" class="divButton">fade in</div>
-        <div onclick="tuneGroup.faidOutSelected()" class="divButton">fade out</div>
-        <div onclick="tuneGroup.volumeStepIncrease()" class="divButton">vol ++</div>
-        <div onclick="tuneGroup.volumeStepDecrease()" class="divButton">vol --</div>
+        <div onclick="tuneGroup.faidInSelected()" class="divButton">fain</div>
+        <div onclick="tuneGroup.faidOutSelected()" class="divButton">fout</div>
+        <div onclick="tuneGroup.volumeStepIncrease()" class="divButton">fain step</div>
+        <div onclick="tuneGroup.volumeStepDecrease()" class="divButton">fout step</div>
         <div onclick="tuneGroup.muteSelected()" class="divButton">mute</div>
-        <div onclick="tuneGroup.unMuteSelected()" class="divButton">unmute</div>
+        <div onclick="tuneGroup.unMuteSelected()" class="divButton">max</div>
         <div onclick="tuneGroup.resetSelected()" class="divButton">reset</div>
         <div onclick="tuneGroup.removeSelected()" class="divButton">remove</div>
+        <div onclick="tuneGroup.createTuneAdder()" class="divButton">edit</div>
         <div onclick="tuneGroup.createTune('https://www.youtube.com/watch?v=ccj1AiFE02U')" class=" divButton">add_test</div>
-        <!--div class="divButton">import json</div>
-        <div class="divButton">export json</div-->
     </div>
     <div class="playerContainerSection" id="playerContainerSection">
         <div id="infoText">Select one or more Tunes ...</div>
